@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %}{% block content
+%}
+<br />
+<form method="POST">
+    <h3 align="center">Get Player</h3>
+    <div class="form-group">
+        <input name="name"class="form-control" id="name" placeholder="Enter player name...">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <br />
+    {{ batter }}
+</form>
+{% endblock %}
