@@ -45,14 +45,15 @@ def home():
                   +str(batter_id)+'/headshot/67/current')
     hitting_data = statsapi.player_stat_data(batter_id, "hitting", "career")
 
-    pitcher_data = statsapi.lookup_player(pitcher.split()[1])[0]
+    pitcher_data = statsapi.lookup_player(pitcher)[0]
     pitcher_id = pitcher_data['id']
     pitcher_img = ('https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_213,q_auto:best/v1/people/'
                   + str(pitcher_id) + '/headshot/67/current')
     pitching_data = statsapi.player_stat_data(pitcher_id, "pitching", "career")
 
-    # RESET errors on calculation
+    # RESET errors on calculation or RESET calculation on new player
 
     return render_template('home.html', batter_data=batter_data, hitting_data=hitting_data,
-                           batter_error=batter_error, batter_img=batter_img, pitcher_data=pitcher_data, pitching_data=pitching_data,
-                           pitcher_error=pitcher_error, pitcher_img=pitcher_img)
+                           batter_error=batter_error, batter_img=batter_img, pitcher_data=pitcher_data,
+                           pitching_data=pitching_data, pitcher_error=pitcher_error, pitcher_img=pitcher_img)
+
