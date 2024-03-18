@@ -1,10 +1,9 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}{% block content
 %}
 <div class="form-group container-expand-lg p-5">
-    <h3 align="center">Get Players</h3>
     <div class="row">
-        <div class="col bg-light p-2">
-            <h5 class="text-center">Batter</h5>
+        <div class="col" style="background-color: rgba(250,250,250,0.95); border: solid; border-width: 1px; border-radius: 10px">
+            <h5 class="text-center p-2">Batter</h5>
             <form method="POST">
                 <div class="container-expand-lg">
                     <div class="row">
@@ -17,22 +16,32 @@
                     </div>
                 </div>
             </form>
-            <br />
+            <p class="text-center text-danger" style="height: 20px">{{ batter_error }}</p>
             <h1 class="text-center">{{ batter_data['fullName'] }}</h1>
-            <p class="text-center">{{ hitting_data['current_team']}} | {{ hitting_data['position'] }} | #{{ batter_data['primaryNumber'] }}</p>
+            <p class="text-center">{{ hitting_data['current_team']}} | {{ hitting_data['position'] }} ({{ hitting_data['bat_side'][0] }}) | #{{ batter_data['primaryNumber'] }}</p>
             <br />
-            <p class="text-center">Career Stats</p>
-            <h4 class="text-center">AVG:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['avg'] }}</h4>
-            <h4 class="text-center">OBP:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['obp'] }}</h4>
-            <h4 class="text-center">SLG:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['slg'] }}</h4>
-            <h4 class="text-center">OPS:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['ops'] }}</h4>
-            <h4 class="text-center">HRs:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['homeRuns'] }}</h4>
-            <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+            <div class="row">
+                <div class="col">
+                    <img class="img-fluid" src="{{ batter_img }}" style="border: solid; border-width: 1px; border-radius: 5px"/>
+                </div>
+                <div class="col">
+                    <p class="text-center">Career Stats</p>
+                    <h4 class="text-center">AVG:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['avg'] }}</h4>
+                    <h4 class="text-center">OBP:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['obp'] }}</h4>
+                    <h4 class="text-center">SLG:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['slg'] }}</h4>
+                    <h4 class="text-center">OPS:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['ops'] }}</h4>
+                    <h4 class="text-center">HRs:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['homeRuns'] }}</h4>
+                </div>
+            </div>
+            <br />
         </div>
-        <div class="col-6">
+        <div class="col-5 mx-5 p-2" style="background-color: rgba(250,250,250,0.95); border: solid; border-width: 1px; border-radius: 10px">
+             <form method="POST" class="text-center">
+                <button type="submit" class="btn btn-primary text-center">Calculate!</button>
+            </form>
         </div>
-        <div class="col bg-light p-2">
-            <h5 class="text-center">Pitcher</h5>
+        <div class="col bg-light" style="background-color: rgba(250,250,250,0.95); border: solid; border-width: 1px; border-radius: 10px">
+            <h5 class="text-center p-2">Pitcher</h5>
             <form method="POST">
                 <div class="container-expand-lg">
                     <div class="row">
@@ -45,17 +54,26 @@
                     </div>
                 </div>
             </form>
-            <br />
+            <p class="text-center text-danger" style="height: 20px">{{ pitcher_error }}</p>
             <h1 class="text-center">{{ pitcher_data['fullName'] }}</h1>
-            <p class="text-center">{{ pitching_data['current_team']}} | {{ pitching_data['pitch_hand'][0] }}H{{ pitching_data['position'] }} | #{{ pitcher_data['primaryNumber'] }}</p>
+            <p class="text-center">{{ pitching_data['current_team']}} | {{ pitching_data['position'] }} ({{ pitching_data['pitch_hand'][0] }}) | #{{ pitcher_data['primaryNumber'] }}</p>
             <br />
-            <p class="text-center">Career Stats</p>
-            <h4 class="text-center">ERA:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['era'] }}</h4>
-            <h4 class="text-center">WHIP:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['whip'] }}</h4>
-            <h4 class="text-center">OPP AVG:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['avg'] }}</h4>
-            <h4 class="text-center">K/BB:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['strikeoutWalkRatio'] }}</h4>
-            <h4 class="text-center">SO:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['strikeOuts'] }}</h4>
+            <div class="row">
+                <div class="col">
+                    <img class="img-fluid" src="{{ pitcher_img }}" style="border: solid; border-width: 1px; border-radius: 5px"/>
+                </div>
+                <div class="col">
+                    <p class="text-center">Career Stats</p>
+                    <h4 class="text-center">ERA:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['era'] }}</h4>
+                    <h4 class="text-center">WHIP:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['whip'] }}</h4>
+                    <h4 class="text-center">Op BA:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['avg'] }}</h4>
+                    <h4 class="text-center">K/BB:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['strikeoutWalkRatio'] }}</h4>
+                    <h4 class="text-center">SO:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['strikeOuts'] }}</h4>
+                </div>
+            </div>
+            <br />
         </div>
     </div>
 </div>
+<br /> <br /> <br />
 {% endblock %}
