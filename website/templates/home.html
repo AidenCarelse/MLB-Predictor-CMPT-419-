@@ -1,13 +1,61 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %}{% block content
 %}
-<br />
-<form method="POST">
-    <h3 align="center">Get Player</h3>
-    <div class="form-group">
-        <input name="name"class="form-control" id="name" placeholder="Enter player name...">
+<div class="form-group container-expand-lg p-5">
+    <h3 align="center">Get Players</h3>
+    <div class="row">
+        <div class="col bg-light p-2">
+            <h5 class="text-center">Batter</h5>
+            <form method="POST">
+                <div class="container-expand-lg">
+                    <div class="row">
+                        <div class="col-9">
+                            <input name="batter" class="form-control" id="batter" placeholder="Enter player name...">
+                        </div>
+                        <div class="col-3">
+                                <button type="submit" class="btn btn-primary text-center">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br />
+            <h1 class="text-center">{{ batter_data['fullName'] }}</h1>
+            <p class="text-center">{{ hitting_data['current_team']}} | {{ hitting_data['position'] }} | #{{ batter_data['primaryNumber'] }}</p>
+            <br />
+            <p class="text-center">Career Stats</p>
+            <h4 class="text-center">AVG:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['avg'] }}</h4>
+            <h4 class="text-center">OBP:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['obp'] }}</h4>
+            <h4 class="text-center">SLG:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['slg'] }}</h4>
+            <h4 class="text-center">OPS:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['ops'] }}</h4>
+            <h4 class="text-center">HRs:&nbsp;&nbsp;&nbsp;&nbsp;{{ hitting_data['stats'][0]['stats']['homeRuns'] }}</h4>
+            <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+        </div>
+        <div class="col-6">
+        </div>
+        <div class="col bg-light p-2">
+            <h5 class="text-center">Pitcher</h5>
+            <form method="POST">
+                <div class="container-expand-lg">
+                    <div class="row">
+                        <div class="col-9">
+                            <input name="pitcher" class="form-control" id="pitcher" placeholder="Enter player name...">
+                        </div>
+                        <div class="col-3">
+                                <button type="submit" class="btn btn-primary text-center">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br />
+            <h1 class="text-center">{{ pitcher_data['fullName'] }}</h1>
+            <p class="text-center">{{ pitching_data['current_team']}} | {{ pitching_data['pitch_hand'][0] }}H{{ pitching_data['position'] }} | #{{ pitcher_data['primaryNumber'] }}</p>
+            <br />
+            <p class="text-center">Career Stats</p>
+            <h4 class="text-center">ERA:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['era'] }}</h4>
+            <h4 class="text-center">WHIP:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['whip'] }}</h4>
+            <h4 class="text-center">OPP AVG:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['avg'] }}</h4>
+            <h4 class="text-center">K/BB:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['strikeoutWalkRatio'] }}</h4>
+            <h4 class="text-center">SO:&nbsp;&nbsp;&nbsp;&nbsp;{{ pitching_data['stats'][0]['stats']['strikeOuts'] }}</h4>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    <br />
-    {{ batter }}
-</form>
+</div>
 {% endblock %}
