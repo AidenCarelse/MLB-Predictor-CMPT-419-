@@ -17,6 +17,8 @@ head_to_head_data = None
 - Make player name's and 'vs' dynamic size (or just smaller)
 - Insufficient data warning
 - Async, make loading easier to understand for user
+- Low data warnings
+- HIT CHANCE OFF, IT IS ACTUALLTY BA
 '''
 
 
@@ -66,6 +68,8 @@ def home():
 
     head_to_head_data = fetch_head_to_head(batter_id, pitcher_id)
 
+    print(get_last_x_games(666182, 'hitting'))
+
     return render_template('home.html', batter_data=batter_data, hitting_data=hitting_data,
                            batter_error=batter_error, batter_img=batter_img, pitcher_data=pitcher_data,
                            pitching_data=pitching_data, pitcher_error=pitcher_error, pitcher_img=pitcher_img,
@@ -101,14 +105,26 @@ def calculate_hit_chance(batting_data, pitching_data):
 
     num1 = (x * y) / z
     num2 = ((1 - x) * (1 - y)) / (1 - z)
-    avg = num1 / (num1 + num2)
+    career_avg = num1 / (num1 + num2)
 
     if int(head_to_head_data[0]) > 0:
-        avg_head_to_head = float(head_to_head_data[4])
+        avg_h2h = float(head_to_head_data[4])
+    else:
+        avg_h2h = career_avg
 
-        avg = (0.2 * avg_head_to_head) + (0.8 * avg)
+    batter_hand = batting_data['bat_side'][0].lower()
+    pitcher_hand = pitching_data['pitch_hand'][0].lower()
 
-    return round(avg * 100, 1)
+    avg_hand_b = get_career_vs_handedness(batting_data['id'], pitcher_hand, int(batting_data['mlb_debut'][0:4]), 'hitting')
+    avg_hand_p = get_career_vs_handedness(pitching_data['id'], batter_hand, int(pitching_data['mlb_debut'][0:4]), 'pitching')
+
+    avg_recent_b = get_last_x_games(batting_data['id'], 'batting')
+    avg_recent_p = get_last_x_games(pitching_data['id'], 'pitching')
+
+    career_avg = ((0.1 * avg_hand_b) + (0.1 * avg_hand_p) + (0.15 * avg_recent_b) + (0.15 * avg_recent_p)
+                  + (0.2 * avg_h2h) + (0.3 * career_avg))
+
+    return round(career_avg * 100, 1)
 
 
 def calculate_strikeout_chance(batting_data, pitching_data):
@@ -161,6 +177,54 @@ def fetch_head_to_head(batter_id, pitcher_id):
         return [pa, h, k, bb, avg, ops, hr]
 
 
+def get_career_vs_handedness(id, handedness, start_year, group):
+    ab = 0
+    hits = 0
+
+    for year in range(start_year, datetime.datetime.now().year + 1):
+        params = {
+            'personIds': str(id),
+            'hydrate': 'stats(group=['+group+'],type=[statSplits],sitCodes=[v' + handedness + '],season='+str(year)+')'
+        }
+        data = statsapi.get('people', params=params)
+
+        ab += data['people'][0]['stats'][0]['splits'][0]['stat']['atBats']
+        hits += data['people'][0]['stats'][0]['splits'][0]['stat']['hits']
+
+    return hits/ab
+
+
+def get_last_x_games(id, group):
+    x = 30
+    if group == 'pitching':
+        x = 10
+    year = datetime.datetime.now().year
+
+    ab = 0
+    hits = 0
+
+    while x > 0:
+        params = {
+            'personIds': str(id),
+            'hydrate': 'stats(group=['+group+'],type=[lastXGames],limit='+str(x)+',season='+str(year)+')'
+        }
+
+        data = statsapi.get('people', params=params)['people'][0]['stats'][0]['splits'][0]['stat']
+        games = data['gamesPlayed']
+        ab += data['atBats']
+        hits += data['hits']
+
+        print('Left:',x,'Current:',games)
+
+        if games == 0:
+            break
+        else:
+            x -= games
+            year -= 1
+
+    return hits/ab
+
+
 def get_seasons_average(start_year, end_year):
     ab = 0
     h = 0
@@ -180,4 +244,4 @@ def get_seasons_average(start_year, end_year):
             ab += split['stat']['atBats']
             h += split['stat']['hits']
 
-    return h/ab
+    return h / ab
