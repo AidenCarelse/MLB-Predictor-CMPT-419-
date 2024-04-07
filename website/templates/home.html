@@ -41,55 +41,67 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="#" onclick="toggleSection('a')">Outcomes</a>
+                <a class="nav-link" href="#" onclick="toggleSection('a')">Predictions</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" onclick="toggleSection('b')">Career Head to Head</a>
+                <a class="nav-link" href="#" onclick="toggleSection('b')">Head to Head</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" onclick="toggleSection('c')">Influences</a>
+                <a class="nav-link" href="#" onclick="toggleSection('c')">Year Influences</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" onclick="toggleSection('d')">Player Influences</a>
               </li>
             </ul>
           </div>
         </nav>
 
         <div class="p-4 container">
-            <div class="row" id="section-a">
-                <div class="col">
-                    <h5>Reach Base:</h5>
-                    <h5>Hit:</h5>
-                    <h5>Strikeout:</h5>
-                    <h5>Home Run:</h5>
-                </div>
-                <div class="col w-25">
-                    <h5>{{ outcomes[0] }}%</h5>
-                    <h5>{{ outcomes[1] }}%</h5>
-                    <h5>{{ outcomes[2] }}%</h5>
-                    <h5>{{ outcomes[3] }}%</h5>
+            <div id="section-a">
+                <p>Predicted outcomes of this matchup!</p>
+                <div class="row">
+                    <div class="col">
+                        <h5>Reach Base:</h5>
+                        <h5>Hit:</h5>
+                        <h5>Strikeout:</h5>
+                        <h5>Home Run:</h5>
+                    </div>
+                    <div class="col w-25">
+                        <h5>{{ outcomes[0] }}%</h5>
+                        <h5>{{ outcomes[1] }}%</h5>
+                        <h5>{{ outcomes[2] }}%</h5>
+                        <h5>{{ outcomes[3] }}%</h5>
+                    </div>
                 </div>
             </div>
-            <div class="row" id="section-b" style="display:none;">
-                <div class="col">
-                    <h5>PAs:</h5>
-                    <h5>Hits:</h5>
-                    <h5>Ks:</h5>
-                    <h5>BBs:</h5>
-                    <h5>AVG:</h5>
-                    <h5>OPS:</h5>
-                    <h5>HRs:</h5>
-                </div>
-                <div class="col">
-                    <h5>{{ head_to_head_data[0] }}</h5>
-                    <h5>{{ head_to_head_data[1] }}</h5>
-                    <h5>{{ head_to_head_data[2] }}</h5>
-                    <h5>{{ head_to_head_data[3] }}</h5>
-                    <h5>{{ head_to_head_data[4] }}</h5>
-                    <h5>{{ head_to_head_data[5] }}</h5>
-                    <h5>{{ head_to_head_data[6] }}</h5>
+            <div id="section-b" style="display:none;">
+                <p>See the players' career stats against each other!</p>
+                <div class="row">
+                    <div class="col">
+                        <h5>PAs:</h5>
+                        <h5>Hits:</h5>
+                        <h5>Ks:</h5>
+                        <h5>BBs:</h5>
+                        <h5>AVG:</h5>
+                        <h5>OPS:</h5>
+                        <h5>HRs:</h5>
+                    </div>
+                    <div class="col">
+                        <h5>{{ head_to_head_data[0] }}</h5>
+                        <h5>{{ head_to_head_data[1] }}</h5>
+                        <h5>{{ head_to_head_data[2] }}</h5>
+                        <h5>{{ head_to_head_data[3] }}</h5>
+                        <h5>{{ head_to_head_data[4] }}</h5>
+                        <h5>{{ head_to_head_data[5] }}</h5>
+                        <h5>{{ head_to_head_data[6] }}</h5>
+                    </div>
                 </div>
             </div>
             <div id="section-c" style="display:none;">
-                <p>CCC</p>
+                <p>See the highest influences per year!</p>
+            </div>
+             <div id="section-d" style="display:none;">
+                <p>See the highest influences per player!</p>
             </div>
         </div>
 
@@ -98,6 +110,7 @@
             document.getElementById('section-a').style.display = 'none';
             document.getElementById('section-b').style.display = 'none';
             document.getElementById('section-c').style.display = 'none';
+            document.getElementById('section-d').style.display = 'none';
             document.getElementById('section-' + section).style.display = '';
         }
         </script>

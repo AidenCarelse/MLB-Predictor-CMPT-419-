@@ -4,6 +4,7 @@ import statsapi
 
 views = Blueprint('views', __name__)
 
+# Default values
 batter = "Bo Bichette"
 pitcher = "Kevin Gausman"
 head_to_head_data = None
@@ -18,7 +19,8 @@ head_to_head_data = None
 - Insufficient data warning
 - Async, make loading easier to understand for user
 - Low data warnings
-- HIT CHANCE OFF, IT IS ACTUALLTY BA
+- HIT CHANCE OFF, IT IS ACTUALLY BA, check paper
+- Only works for players on MLB roster
 '''
 
 
@@ -68,7 +70,7 @@ def home():
 
     head_to_head_data = fetch_head_to_head(batter_id, pitcher_id)
 
-    print(get_last_x_games(666182, 'hitting'))
+    test_get_roster()
 
     return render_template('home.html', batter_data=batter_data, hitting_data=hitting_data,
                            batter_error=batter_error, batter_img=batter_img, pitcher_data=pitcher_data,
@@ -214,8 +216,6 @@ def get_last_x_games(id, group):
         ab += data['atBats']
         hits += data['hits']
 
-        print('Left:',x,'Current:',games)
-
         if games == 0:
             break
         else:
@@ -245,3 +245,15 @@ def get_seasons_average(start_year, end_year):
             h += split['stat']['hits']
 
     return h / ab
+
+
+def test_get_roster():
+
+    for num in range(105, 150):
+        params = {
+            'teamId': str(num),
+            'sportId': '1'
+        }
+
+        data = statsapi.get('team', params=params)
+        print(data['teams'][0]['name'])
