@@ -26,6 +26,8 @@ head_to_head_data = None
 - Add detailed descriptions to outcome pages
 - Clean code (add comments, remove prints, fix formatting)
 - Add more parameters?
+- Header
+- Don't divice by zero!
 '''
 
 
