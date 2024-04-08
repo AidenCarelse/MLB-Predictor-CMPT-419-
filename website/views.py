@@ -16,18 +16,14 @@ head_to_head_data = None
 - Player search dropdown
 - Accents in names
 - Somtimes refresh/new search changes back to default players
-- Make 'outcomes' appear clicked by default
 - Make player name's and 'vs' dynamic size (or just smaller)
 - Insufficient data warning
 - Async, make loading easier to understand for user
-- Low data warnings (0% homerun)
-- Only works for players on MLB roster
-- Are strikeouts mixed up with other outs?
-- Add detailed descriptions to outcome pages
+- Low data warnings (0% home run)
 - Clean code (add comments, remove prints, fix formatting)
 - Add more parameters?
 - Header
-- Don't divice by zero!
+- Don't divide by zero!
 '''
 
 

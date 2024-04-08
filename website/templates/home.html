@@ -41,13 +41,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="#" onclick="toggleSection('a')">Predictions</a>
+                <a class="nav-link" href="#" onclick="toggleSection('a')" id="tab-a" style="color: #111111; text-decoration: underline;">Predictions</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" onclick="toggleSection('b')">Head to Head</a>
+                <a class="nav-link" href="#" onclick="toggleSection('b')" id="tab-b" style="color: #999999">Head to Head</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" onclick="toggleSection('c')">Year Influences</a>
+                <a class="nav-link" href="#" onclick="toggleSection('c')" id="tab-c" style="color: #999999">Year Influences</a>
               </li>
             </ul>
           </div>
@@ -70,6 +70,7 @@
                         <h5>{{ outcomes[3] }}%</h5>
                     </div>
                 </div>
+                <p style="padding-top: 10px; font-size: 14px;">Predicted outcomes are calculated using data from both players' entire careers. Splits against each other, their opponent's handedness and statistics from recent games are weighted more heavily to produce a more accurate result. Please note that only players that are currently on an active MLB roster are eligible.</p>
             </div>
             <div id="section-b" style="display:none;">
                 <p>See the players' career stats against each other!</p>
@@ -93,6 +94,7 @@
                         <h5>{{ head_to_head_data[1][6] }}</h5>
                     </div>
                 </div>
+                  <p style="padding-top: 10px; font-size: 14px;">Above are some relevant stats from the times these two players have faced up against each other in the MLB. If there exists any information, it is taken into consideration when calculating predicted outcomes.</p>
             </div>
             <div id="section-c" style="display:none;">
                 <p>See which years have the highest influence on the predicted outcomes!</p>
@@ -144,7 +146,18 @@
             document.getElementById('section-a').style.display = 'none';
             document.getElementById('section-b').style.display = 'none';
             document.getElementById('section-c').style.display = 'none';
+
+            document.getElementById('tab-a').style.color = '#999999';
+            document.getElementById('tab-b').style.color = '#999999';
+            document.getElementById('tab-c').style.color = '#99999';
+
+            document.getElementById('tab-a').style.textDecoration = "none";
+            document.getElementById('tab-b').style.textDecoration = "none";
+            document.getElementById('tab-c').style.textDecoration = "none";
+
             document.getElementById('section-' + section).style.display = '';
+            document.getElementById('tab-' + section).style.color = '#111111';
+            document.getElementById('tab-' + section).style.textDecoration = "underline";
         }
         </script>
 
