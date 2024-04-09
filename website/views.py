@@ -12,7 +12,6 @@ pitcher = ""
 head_to_head_data = None
 
 '''
-- RESET errors on calculation or RESET calculation on new player
 - Player search dropdown
 - Accents in names
 - Somtimes refresh/new search changes back to default players
@@ -23,7 +22,7 @@ head_to_head_data = None
 - Clean code (add comments, remove prints, fix formatting)
 - Add more parameters?
 - Header
-- Don't divide by zero!
+- Allow users to select both players at once
 '''
 
 
@@ -77,16 +76,17 @@ def home():
             + str(pitcher_id) + '/headshot/67/current')
     pitching_data = statsapi.player_stat_data(pitcher_id, "pitching", "career")
 
-    head_to_head_data = fetch_head_to_head(batter_id, pitcher_id, None)
+    outcomes, loo_year = calculate_outcomes(hitting_data, pitching_data, None)
 
     return render_template('home.html', batter_data=batter_data, hitting_data=hitting_data,
                            batter_error=batter_error, batter_img=batter_img, pitcher_data=pitcher_data,
                            pitching_data=pitching_data, pitcher_error=pitcher_error, pitcher_img=pitcher_img,
-                           outcomes=calculate_outcomes(hitting_data, pitching_data, None),
-                           head_to_head_data=head_to_head_data)
+                           outcomes=outcomes, loo_year=loo_year, head_to_head_data=head_to_head_data)
 
 
 def calculate_outcomes(batting_data, pitching_data, exclude_year):
+    global head_to_head_data
+
     min_year = int(batting_data['mlb_debut'][0:4])
     p_debut = int(pitching_data['mlb_debut'][0:4])
 
@@ -101,7 +101,11 @@ def calculate_outcomes(batting_data, pitching_data, exclude_year):
 
     league_averages = get_league_averages(min_year, datetime.datetime.now().year, exclude_year)
 
-    b_h2h = fetch_head_to_head(batting_data['id'], pitching_data['id'], exclude_year)[0]
+    b_h2h, d_h2h = fetch_head_to_head(batting_data['id'], pitching_data['id'], exclude_year)
+
+    if exclude_year is None:
+        head_to_head_data = d_h2h
+
     b_hand = get_career_vs_handedness(batting_data['id'], pitcher_hand, int(batting_data['mlb_debut'][0:4]),
                                       'hitting', exclude_year)
     b_recent = get_last_x_games(batting_data['id'], 'batting', exclude_year)
@@ -110,7 +114,7 @@ def calculate_outcomes(batting_data, pitching_data, exclude_year):
     if np.all(b_h2h == 0):
         b_h2h = b_career
 
-    batter_averages = (0.15 * b_h2h) + (0.15 * b_hand) + (0.15 * b_recent) + (0.55 * b_career)
+    batter_averages = (0.2 * b_h2h) + (0.15 * b_hand) + (0.3 * b_recent) + (0.35 * b_career)
 
     p_h2h = fetch_head_to_head(batting_data['id'], pitching_data['id'], exclude_year)[0]
     p_hand = get_career_vs_handedness(pitching_data['id'], batter_hand, int(pitching_data['mlb_debut'][0:4]),
@@ -121,7 +125,7 @@ def calculate_outcomes(batting_data, pitching_data, exclude_year):
     if np.all(p_h2h == 0):
         p_h2h = p_career
 
-    pitcher_averages = (0.15 * p_h2h) + (0.15 * p_hand) + (0.15 * p_recent) + (0.55 * p_career)
+    pitcher_averages = (0.2 * p_h2h) + (0.15 * p_hand) + (0.3 * p_recent) + (0.35 * p_career)
 
     outcomes = predict_outcomes(league_averages, batter_averages, pitcher_averages)
 
@@ -133,24 +137,46 @@ def calculate_outcomes(batting_data, pitching_data, exclude_year):
     predictions = ["{:.1f}".format(reach_base), "{:.1f}".format(hit), "{:.1f}".format(strikeout),
                    "{:.1f}".format(home_run)]
 
-    '''if exclude_year is None:
+    curr_year = datetime.datetime.now().year + 1
+    exclude_predictions = np.zeros((curr_year - max_year, 9))
+    exclude_predictions = list(map(str, exclude_predictions))
+
+    if exclude_year is None:
         print(exclude_year, predictions)
-        curr_year = datetime.datetime.now().year + 1
-        exclude_predictions = np.zeros((curr_year - max_year, 5))
+        diffs = np.zeros(curr_year - max_year)
 
         for i in range(max_year, curr_year):
-            curr_pred = calculate_outcomes(batting_data, pitching_data, i)
+            curr_pred = calculate_outcomes(batting_data, pitching_data, i)[0]
             diff = np.sum(np.abs(np.array(predictions).astype(np.float_) - np.array(curr_pred).astype(np.float_)))
 
+            curr_pred = list(map(str, curr_pred))
             print(i, curr_pred, diff)
-            curr_pred = np.insert(curr_pred, 0, diff)
+
+            curr_pred = np.append(curr_pred, compute_difference(curr_pred[0], predictions[0]))
+            curr_pred = np.append(curr_pred, compute_difference(curr_pred[1], predictions[1]))
+            curr_pred = np.append(curr_pred, compute_difference(curr_pred[2], predictions[2]))
+            curr_pred = np.append(curr_pred, compute_difference(curr_pred[3], predictions[3]))
+
+            curr_pred = np.append(curr_pred, str(i))
+            diffs[i - max_year] = diff
             exclude_predictions[i - max_year] = curr_pred
 
-        print(exclude_predictions)
-        sorted_indices = np.argsort(exclude_predictions[:, 0])[::-1]
-        print(exclude_predictions[sorted_indices])'''
+        combined_data = list(zip(diffs, exclude_predictions))
+        sorted_combined_data = sorted(combined_data, key=lambda x: x[0], reverse=True)
+        exclude_predictions = np.array([item[1] for item in sorted_combined_data])
 
-    return predictions
+        rows = exclude_predictions.shape[0]
+        while rows < 3:
+            rows += 1
+            new_row = ['', '', '', '', '', '', '', '', '']
+            exclude_predictions = np.vstack((exclude_predictions, new_row))
+
+        exclude_predictions[exclude_predictions == 'nan'] = 0.0
+        exclude_predictions = [[s.split('.')[0] + '.' + s.split('.')[1][0] if '.' in s else s for s in row] for row in exclude_predictions]
+
+        print(exclude_predictions)
+
+    return predictions, exclude_predictions
 
 
 def get_league_averages(start_year, end_year, exclude_year):
@@ -200,6 +226,9 @@ def get_league_averages(start_year, end_year, exclude_year):
 
 
 def get_player_averages(player_data, pitcher, exclude_year):
+    if len(player_data['stats']) == 0:
+        return np.zeros(9)
+
     data = player_data['stats'][0]['stats']
 
     doubles = data['doubles']
@@ -310,6 +339,10 @@ def get_last_x_games(id, group, exclude_year):
 
 
 def normalize_averages(averages):
+
+    if averages[8] == 0:
+        return np.zeros(9, dtype=float)
+
     for i in range(0, 8):
         averages[i] = averages[i] / averages[8]
 
@@ -414,6 +447,10 @@ def fetch_head_to_head(batter_id, pitcher_id, exclude_year):
         if exclude_year is not None:
             year_data = year_data[1]['splits']
             for year in year_data:
+
+                if not 'season' in year:
+                    continue
+
                 if year['season'] == str(exclude_year):
                     data = year['stat']
 
@@ -477,3 +514,22 @@ def subtract_arrays(a, b):
         a[i] -= b[i]
 
     return a
+
+def compute_difference(a, b):
+
+    if a == 'nan':
+        a = '0.0'
+    if b  == 'nan':
+        b = '0.0'
+
+    number1 = float(a)
+    number2 = float(b)
+
+    result = number1 - number2
+
+    if result >= 0:
+        result_str = '+' + str(result)
+    else:
+        result_str = str(result)
+
+    return result_str

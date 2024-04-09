@@ -47,7 +47,7 @@
                 <a class="nav-link" href="#" onclick="toggleSection('b')" id="tab-b" style="color: #999999">Head to Head</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#" onclick="toggleSection('c')" id="tab-c" style="color: #999999">Year Influences</a>
+                <a class="nav-link" href="#" onclick="hideYear()" id="tab-c" style="color: #999999">Year Influences</a>
               </li>
             </ul>
           </div>
@@ -85,63 +85,75 @@
                         <h5>HRs:</h5>
                     </div>
                     <div class="col">
-                        <h5>{{ head_to_head_data[1][0] }}</h5>
-                        <h5>{{ head_to_head_data[1][1] }}</h5>
-                        <h5>{{ head_to_head_data[1][2] }}</h5>
-                        <h5>{{ head_to_head_data[1][3] }}</h5>
-                        <h5>{{ head_to_head_data[1][4] }}</h5>
-                        <h5>{{ head_to_head_data[1][5] }}</h5>
-                        <h5>{{ head_to_head_data[1][6] }}</h5>
+                        <h5>{{ head_to_head_data[0] }}</h5>
+                        <h5>{{ head_to_head_data[1] }}</h5>
+                        <h5>{{ head_to_head_data[2] }}</h5>
+                        <h5>{{ head_to_head_data[3] }}</h5>
+                        <h5>{{ head_to_head_data[4] }}</h5>
+                        <h5>{{ head_to_head_data[5] }}</h5>
+                        <h5>{{ head_to_head_data[6] }}</h5>
                     </div>
                 </div>
                   <p style="padding-top: 10px; font-size: 14px;">Above are some relevant stats from the times these two players have faced up against each other in the MLB. If there exists any information, it is taken into consideration when calculating predicted outcomes.</p>
             </div>
             <div id="section-c" style="display:none;">
                 <p>See which years have the highest influence on the predicted outcomes!</p>
-                 <div class="row" style="background-color: rgba(160,160,160,0.25);">
+                 <div class="row" id="loo1" style="background-color: rgba(160,160,160,0.25);">
                      <div class="col-2 d-flex align-items-center">
-                        <h3 class="">2023</h3>
+                        <h3 id="loo_year1" class="">{{ loo_year[0][8] }}</h3>
                      </div>
                      <div class="col" style="padding-top: 15px; font-size: 14px;">
-                          <p>• Reach Base: 50.0% (+10.0%)</p>
-                          <p>• Hit: 50.0% (+10.0%)</p>
+                          <p>• Reach Base: {{  loo_year[0][0] }}% ({{  loo_year[0][4] }}%)</p>
+                          <p>• Hit: {{  loo_year[0][1] }}% ({{  loo_year[0][5] }}%)</p>
                      </div>
                      <div class="col" style="padding-top: 15px;  font-size: 14px;">
-                          <p>• Strikeout: 50.0% (+10.0%)</p>
-                          <p>• Home Run: 50.0% (+10.0%)</p>
+                          <p>• Strikeout: {{  loo_year[0][2] }}% ({{  loo_year[0][6] }}%)</p>
+                          <p>• Home Run: {{  loo_year[0][3] }}% ({{  loo_year[0][7] }}%)</p>
                      </div>
                  </div>
-                 <div class="row">
-                     <div class="col-2 d-flex align-items-center">
-                        <h3 class="">2019</h3>
+                 <div class="row" id="loo2">
+                    <div class="col-2 d-flex align-items-center">
+                        <h3 id="loo_year2" class="">{{ loo_year[1][8] }}</h3>
                      </div>
                      <div class="col" style="padding-top: 15px; font-size: 14px;">
-                          <p>• Reach Base: 50.0% (+10.0%)</p>
-                          <p>• Hit: 50.0% (+10.0%)</p>
+                          <p>• Reach Base: {{  loo_year[1][0] }}% ({{  loo_year[1][4] }}%)</p>
+                          <p>• Hit: {{  loo_year[1][1] }}% ({{  loo_year[1][5] }}%)</p>
                      </div>
                      <div class="col" style="padding-top: 15px;  font-size: 14px;">
-                          <p>• Strikeout: 50.0% (+10.0%)</p>
-                          <p>• Home Run: 50.0% (+10.0%)</p>
+                          <p>• Strikeout: {{  loo_year[1][2] }}% ({{  loo_year[1][6] }}%)</p>
+                          <p>• Home Run: {{  loo_year[1][3] }}% ({{  loo_year[1][7] }}%)</p>
                      </div>
                  </div>
-                 <div class="row" style="background-color: rgba(160,160,160,0.25);">
+                 <div class="row" id="loo3" style="background-color: rgba(160,160,160,0.25);">
                      <div class="col-2 d-flex align-items-center">
-                        <h3 class="">2022</h3>
+                        <h3 id="loo_year3" class="">{{ loo_year[2][8] }}</h3>
+                     </div>
+                     <div class="col" style="padding-top: 15px; font-size: 14px;">
+                          <p>• Reach Base: {{  loo_year[2][0] }}% ({{  loo_year[2][4] }}%)</p>
+                          <p>• Hit: {{  loo_year[2][1] }}% ({{  loo_year[2][5] }}%)</p>
                      </div>
                      <div class="col" style="padding-top: 15px;  font-size: 14px;">
-                          <p>• Reach Base: 50.0% (+10.0%)</p>
-                          <p>• Hit: 50.0% (+10.0%)</p>
-                     </div>
-                     <div class="col" style="padding-top: 15px;  font-size: 14px;">
-                          <p>• Strikeout: 50.0% (+10.0%)</p>
-                          <p>• Home Run: 50.0% (+10.0%)</p>
+                          <p>• Strikeout: {{  loo_year[2][2] }}% ({{  loo_year[2][6] }}%)</p>
+                          <p>• Home Run: {{  loo_year[2][3] }}% ({{  loo_year[2][7] }}%)</p>
                      </div>
                  </div>
-                <p style="padding-top: 10px; font-size: 14px;">Influences are calculated by excluding a specific year's data and re-computing predicted outcomes.</p>
+                <p style="padding-top: 10px; font-size: 14px;">The top three years are listed in order above. Influences are calculated by excluding a specific year's data and re-computing the predictions. A negative percent change means the outcome is less likely to happen without that specific year's data.</p>
             </div>
         </div>
 
         <script>
+        function hideYear() {
+            toggleSection('c');
+
+            if (document.getElementById('loo_year2').textContent == '') {
+                document.getElementById('loo2').classList.add('invisible');
+            }
+
+            if (document.getElementById('loo_year3').textContent == '') {
+                document.getElementById('loo3').classList.add('invisible');
+            }
+        }
+
         function toggleSection(section) {
             document.getElementById('section-a').style.display = 'none';
             document.getElementById('section-b').style.display = 'none';
@@ -149,7 +161,7 @@
 
             document.getElementById('tab-a').style.color = '#999999';
             document.getElementById('tab-b').style.color = '#999999';
-            document.getElementById('tab-c').style.color = '#99999';
+            document.getElementById('tab-c').style.color = '#999999';
 
             document.getElementById('tab-a').style.textDecoration = "none";
             document.getElementById('tab-b').style.textDecoration = "none";
