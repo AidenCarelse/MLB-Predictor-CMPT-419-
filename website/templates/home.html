@@ -103,12 +103,12 @@
                         <h3 id="loo_year1" class="">{{ loo_year[0][8] }}</h3>
                      </div>
                      <div class="col" style="padding-top: 15px; font-size: 14px;">
-                          <p>• Reach Base: {{  loo_year[0][0] }}% ({{  loo_year[0][4] }}%)</p>
-                          <p>• Hit: {{  loo_year[0][1] }}% ({{  loo_year[0][5] }}%)</p>
+                          <p class="percent_change">• Reach Base: {{  loo_year[0][0] }}% ({{  loo_year[0][4] }}%)</p>
+                          <p class="percent_change">• Hit: {{  loo_year[0][1] }}% ({{  loo_year[0][5] }}%)</p>
                      </div>
                      <div class="col" style="padding-top: 15px;  font-size: 14px;">
-                          <p>• Strikeout: {{  loo_year[0][2] }}% ({{  loo_year[0][6] }}%)</p>
-                          <p>• Home Run: {{  loo_year[0][3] }}% ({{  loo_year[0][7] }}%)</p>
+                          <p class="percent_change">• Strikeout: {{  loo_year[0][2] }}% ({{  loo_year[0][6] }}%)</p>
+                          <p class="percent_change">• Home Run: {{  loo_year[0][3] }}% ({{  loo_year[0][7] }}%)</p>
                      </div>
                  </div>
                  <div class="row" id="loo2">
@@ -116,12 +116,12 @@
                         <h3 id="loo_year2" class="">{{ loo_year[1][8] }}</h3>
                      </div>
                      <div class="col" style="padding-top: 15px; font-size: 14px;">
-                          <p>• Reach Base: {{  loo_year[1][0] }}% ({{  loo_year[1][4] }}%)</p>
-                          <p>• Hit: {{  loo_year[1][1] }}% ({{  loo_year[1][5] }}%)</p>
+                          <p class="percent_change">• Reach Base: {{  loo_year[1][0] }}% ({{  loo_year[1][4] }}%)</p>
+                          <p class="percent_change">• Hit: {{  loo_year[1][1] }}% ({{  loo_year[1][5] }}%)</p>
                      </div>
                      <div class="col" style="padding-top: 15px;  font-size: 14px;">
-                          <p>• Strikeout: {{  loo_year[1][2] }}% ({{  loo_year[1][6] }}%)</p>
-                          <p>• Home Run: {{  loo_year[1][3] }}% ({{  loo_year[1][7] }}%)</p>
+                          <p class="percent_change">• Strikeout: {{  loo_year[1][2] }}% ({{  loo_year[1][6] }}%)</p>
+                          <p class="percent_change">• Home Run: {{  loo_year[1][3] }}% ({{  loo_year[1][7] }}%)</p>
                      </div>
                  </div>
                  <div class="row" id="loo3" style="background-color: rgba(160,160,160,0.25);">
@@ -129,12 +129,12 @@
                         <h3 id="loo_year3" class="">{{ loo_year[2][8] }}</h3>
                      </div>
                      <div class="col" style="padding-top: 15px; font-size: 14px;">
-                          <p>• Reach Base: {{  loo_year[2][0] }}% ({{  loo_year[2][4] }}%)</p>
-                          <p>• Hit: {{  loo_year[2][1] }}% ({{  loo_year[2][5] }}%)</p>
+                          <p class="percent_change">• Reach Base: {{  loo_year[2][0] }}% ({{  loo_year[2][4] }}%)</p>
+                          <p class="percent_change">• Hit: {{  loo_year[2][1] }}% ({{  loo_year[2][5] }}%)</p>
                      </div>
                      <div class="col" style="padding-top: 15px;  font-size: 14px;">
-                          <p>• Strikeout: {{  loo_year[2][2] }}% ({{  loo_year[2][6] }}%)</p>
-                          <p>• Home Run: {{  loo_year[2][3] }}% ({{  loo_year[2][7] }}%)</p>
+                          <p class="percent_change">• Strikeout: {{  loo_year[2][2] }}% ({{  loo_year[2][6] }}%)</p>
+                          <p class="percent_change">• Home Run: {{  loo_year[2][3] }}% ({{  loo_year[2][7] }}%)</p>
                      </div>
                  </div>
                 <p style="padding-top: 10px; font-size: 14px;">The top three years are listed in order above. Influences are calculated by excluding a specific year's data and re-computing the predictions. A negative percent change means the outcome is less likely to happen without that specific year's data.</p>
@@ -144,6 +144,7 @@
         <script>
         function hideYear() {
             toggleSection('c');
+            colourText();
 
             if (document.getElementById('loo_year2').textContent == '') {
                 document.getElementById('loo2').classList.add('invisible');
@@ -170,6 +171,30 @@
             document.getElementById('section-' + section).style.display = '';
             document.getElementById('tab-' + section).style.color = '#111111';
             document.getElementById('tab-' + section).style.textDecoration = "underline";
+        }
+
+        function colourText() {
+            var elements = document.getElementsByClassName('percent_change')
+            for (var i = 0; i < elements.length; i++) {
+                var p = elements[i];
+                var text = p.textContent;
+                var colour = 'green';
+
+                var start = text.indexOf('+');
+                if (start == -1) {
+                    start = text.indexOf('-');
+                    colour = 'red';
+                }
+
+                var end = text.indexOf('%');
+                end = text.indexOf('%', end + 1) + 1;
+
+                var part1 = text.substring(0, start);
+                var part2 = text.substring(start, end);
+                var part3 = text.substring(end);
+
+                p.innerHTML = '<span>' + part1 + '</span><span style="color: '+colour+';">' + part2 + '</span><span>' + part3 + '</span>';
+            }
         }
         </script>
 

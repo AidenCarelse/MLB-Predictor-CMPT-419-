@@ -15,13 +15,8 @@ head_to_head_data = None
 - Player search dropdown
 - Accents in names
 - Somtimes refresh/new search changes back to default players
-- Make player name's and 'vs' dynamic size (or just smaller)
-- Insufficient data warning
 - Async, make loading easier to understand for user
-- Low data warnings (0% home run)
 - Clean code (add comments, remove prints, fix formatting)
-- Add more parameters?
-- Header
 - Allow users to select both players at once
 '''
 
@@ -129,10 +124,10 @@ def calculate_outcomes(batting_data, pitching_data, exclude_year):
 
     outcomes = predict_outcomes(league_averages, batter_averages, pitcher_averages)
 
-    hit = outcomes[0] + outcomes[1] + outcomes[2] + outcomes[3]
-    reach_base = hit + outcomes[4] + outcomes[5]
-    strikeout = outcomes[7]
-    home_run = outcomes[3]
+    hit = max(outcomes[0] + outcomes[1] + outcomes[2] + outcomes[3], 0.1)
+    reach_base = max(hit + outcomes[4] + outcomes[5], 0.1)
+    strikeout =  max(outcomes[7], 0.1)
+    home_run =  max(outcomes[3], 0.1)
 
     predictions = ["{:.1f}".format(reach_base), "{:.1f}".format(hit), "{:.1f}".format(strikeout),
                    "{:.1f}".format(home_run)]
@@ -173,8 +168,6 @@ def calculate_outcomes(batting_data, pitching_data, exclude_year):
 
         exclude_predictions[exclude_predictions == 'nan'] = 0.0
         exclude_predictions = [[s.split('.')[0] + '.' + s.split('.')[1][0] if '.' in s else s for s in row] for row in exclude_predictions]
-
-        print(exclude_predictions)
 
     return predictions, exclude_predictions
 

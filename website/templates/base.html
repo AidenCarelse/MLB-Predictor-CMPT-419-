@@ -17,19 +17,19 @@
         <title>{% block title %}Home{% endblock %}</title>
     </head>
 
-    <body>
+    <body style="height: 100vh;">
          <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="navbar" id="navbar">
-                <div class="navbar-nav">
-                  <a class="nav-item nav-link" id="home" href="/">Home</a>
-                  <a class="nav-item nav-link" id="about" href="/about">About</a>
+                <div class="navbar-nav d-flex align-items-center">
+                   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Major_League_Baseball_logo.svg/2560px-Major_League_Baseball_logo.svg.png" class="img-fluid pr-3" style="height: 30px">
+                    <a class="nav-item nav-link" id="home" href="/">MLB At-Bat Predictor</a>
                 </div>
              </div>
          </nav>
 
          <div
-             class="container-expand-lg full-height"
-             style="background-image: url('https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fightingillini.com/images/2023/10/19/20230830_BSB_Facilities_Infield_KS_0007.jpg'); background-position: 50% 50%;">
+             class="container-expand-lg full-height h-100 bg-info container-fluid"
+             style="height: 100vh; height: 100%; background-image: url('https://dxbhsrqyrr690.cloudfront.net/sidearm.nextgen.sites/fightingillini.com/images/2023/10/19/20230830_BSB_Facilities_Infield_KS_0007.jpg'); background-position: center; background-size: cover;">
              {% block content %} {% endblock %}
          </div>
 
