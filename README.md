@@ -4,4 +4,8 @@ Ever wanted to see the probability of your favourite baseball player hitting a h
 
 ![alt text](main_page.png "Main Page")
 
+![alt text](past_outcomes.png "Past Outcomes")
+
+![alt text](year_influences.png "Year Influences")
+
 Note: This project was created for CMPT 419 at SFU and has focused on performing operations on large sets of data instead of front-end design and user experience. The LOO year influence can take a while to compute, so long loading times can be expected.
